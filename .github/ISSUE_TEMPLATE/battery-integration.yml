@@ -1,0 +1,99 @@
+name: Battery asset integration + field test
+description: Integrate a new Battery asset into the Teleport ecosystem
+title: "Integrate Battery: <asset> to the asset library"
+labels: ["sales&ops", "enhancement", "asset"]
+projects: ["withthegrid/19"]
+body:
+  - type: input
+    id: asset
+    attributes:
+      label: Asset type
+      description: What is the brand and type of the battery you want to integrate?
+      placeholder: "e.g., Sungrow ST556KWH-250UD"
+    validations:
+      required: true
+  - type: textarea
+    id: protocol
+    attributes:
+      label: Protocol documentation
+      description: Upload the protocol documentation (eg. modbus register)
+    validations:
+      required: true
+  - type: textarea
+    id: deals
+    attributes:
+      label: Deal(s)
+      description: Name of the Hubspot deal(s), including a link to the Hubspot deal(s).
+      value: "[Karwei - Teleport (Edmij)](https://app.hubspot.com/contacts/6936492/deal/18503131550)"
+      placeholder: "[Karwei - Teleport (Edmij)](https://app.hubspot.com/contacts/6936492/deal/18503131550)"
+    validations:
+      required: true
+  - type: textarea
+    id: tickets
+    attributes:
+      label: Ticket(s)
+      description: Name of the Hubspot tickets(s), including a link
+      value: "[1 TP for Karwei Wijk bij Duurstede - LC - Sungrow (Edmij)](https://app.hubspot.com/contacts/6936492/record/0-5/2644173652)"
+      placeholder: "[1 TP for Karwei Wijk bij Duurstede - LC - Sungrow (Edmij)](https://app.hubspot.com/contacts/6936492/record/0-5/2644173652)"
+    validations:
+      required: false
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      options:
+        - Sold
+        - Not yet confirmed by customer
+      default: 1
+    validations:
+      required: true
+  - type: textarea
+    id: oem-contact
+    attributes:
+      label: OEM contact
+      description: Email address of the party we can ask questions during the integration
+      placeholder: john@huawei.com
+    validations:
+      required: true
+  - type: textarea
+    id: test-contact
+    attributes:
+      label: Test contact
+      description: Email address of the person that can facilitate on-site testing
+      placeholder: jane@customer.com
+    validations:
+      required: true
+  - type: textarea
+    id: prioritization-input
+    attributes:
+      label: Prioritization context
+      description: Deadlines, agreements, context
+    validations:
+      required: true
+  - type: checkboxes
+    id: checklist-battery
+    attributes:
+      label: "Field Test: Battery"
+      options:
+        - label: The installation instructions listed in the documentation are sufficient for the installer and an operations engineer to connect the asset, and updated if not.
+        - label: The asset generates reports at the expected interval.
+        - label: The generation duration of the reports is not unexpectedly high, e.g. usually less than a couple hundred milliseconds.
+        - label: There are no alarms.
+        - label: Verified the direction of all current and power measurements, including for DC measurements.
+        - label: "**Set a low (e.g., 10% of nominal power) charging setpoint and confirmed that:**"
+        - label: "State of Charge (SoC), energy.charged, and availableEnergy increased."
+        - label: "Energy.discharged remained constant."
+        - label: "&nbsp;&nbsp;&nbsp;&nbsp;Active power and current measurements became negative."
+        - label: "&nbsp;&nbsp;&nbsp;&nbsp;Checked that the energy and SoC increase roughly matched the active power multiplied by the elapsed time, at least 5 minutes."
+        - label: "**Compared the active power measurement with an external source by doing one of the following:**"
+        - label: "&nbsp;&nbsp;&nbsp;&nbsp;1. Reading an already validated meter connected to the Teleport. E.g. charging the battery with 20 kW and observing -20 kW active power on the battery, and comparing that with the difference observed at the meter."
+        - label: "&nbsp;&nbsp;&nbsp;&nbsp;2. Reading the active power via the web interface or screen of the asset, the latter being read by a party on site."
+        - label: Checked the direction and magnitude of reactive power: set a reactive power setpoint on the asset and verified that the appropriate change occurred on the measured reactive power on the meter.
+        - label: "**Set a dispatch power setpoint as large as possible while staying well within grid limits:**"
+        - label: "&nbsp;&nbsp;&nbsp;&nbsp;Tested both charging and discharging directions."
+        - label: "&nbsp;&nbsp;&nbsp;&nbsp;Confirmed the asset responds within a few seconds and reaches the target active power with a small margin."
+        - label: Updated [`ALLOWED_AUXILIARY_CONSUMPTION_PERCENTAGE_MARGIN`](https://github.com/withthegrid/teleport/blob/e0519b583602216d3f91105520a4a3952ffc54e2/packages/cloud-device-gateway/src/services/monitors/active-power-is-responsive.ts#L35).
+        - label: Updated `DEFAULT_STATE_OF_CHARGE_LIMITS`.
+        - label: The asset connector TODOs have been dealt with and removed, or at least a PR open to do so.
+        - label: Documented any particularities (e.g., slow response times, required manual settings, or limitations) in the [asset guide](https://github.com/withthegrid/teleport/tree/main/guides/asset).
+        - label: Removed the `warning` on the public installation instructions about the field test not yet being completed.
